@@ -5,8 +5,7 @@ async function getUsers() {
 
   try {
     let pool = await  sql.connect(config);
-    let users = await  pool.
-    request()
+    let users = await  pool.request()
     .query("Select * from Users"); //exexuting get User procedure
     return users.recordsets;
   }
@@ -56,6 +55,12 @@ async  function getUserBalanceInquiryByMobileNumber(MobileNumber) {
   catch (error) {
     console.log("Data not found", error);
   }
+}
+
+
+async function getFundPrices (){
+  let pool = await sql.connect (config);
+  let fundNav = await pool.
 }
 
 //
