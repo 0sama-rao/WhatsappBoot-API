@@ -1,5 +1,6 @@
 var  config = require('../dbconfig');
 const  sql = require('mssql');
+const HttpError = require ('../models/http-error');
 
 async function getUsers() {
 
@@ -13,32 +14,41 @@ async function getUsers() {
     console.log(error);
   }
 }
+
 //getUser data by InvestorID
 async  function  getUserByRegNo(RegNo) {
-  try {
+  try{
     let  pool = await  sql.connect(config);
     let  product = await  pool.request()
     .input('input_parameter', sql.Int, RegNo)
     .query("SELECT * from Users where RegNo = @input_parameter");
     return  product.recordsets;
   }
+
   catch (error) {
-    console.log("Error found !! ", 404);
+    console.log("Cant use Characters ", 404);
   }
+
 }
+
+ // => {place } => {place: place}
 
 //Get UserInfo by MobileNumberS
 async  function  getUserByMobileNumber(MobileNumber) {
   try {
     let  pool = await  sql.connect(config);
-    let  product = await  pool.request()
+    let  mobFunc = await  pool.request()
     .input('input_parameter', sql.VarChar, MobileNumber)
     .query("SELECT * from Users where Mobile = @input_parameter");
-    return  product.recordsets;
-
+    return mobFunc.recordsets;
   }
   catch (error) {
     console.log("Error found !! ", 404);
+  }
+  finally{
+    if(!MobileNumber){
+      console.log("Cant found ")
+    }
   }
 }
 
@@ -57,13 +67,35 @@ async  function getUserBalanceInquiryByMobileNumber(MobileNumber) {
   }
 }
 
+//get FUndNav
+async  function getFundPrices(fundprice) {
+  try {
+    let  pool = await  sql.connect(config);
+    let  mob = await  pool.request()
+    .input('date', sql.VarChar, fundprice)
+    .query('select * from offRed where eDate = @date' );
+    return  mob.recordsets;
+  }
 
-async function getFundPrices (){
-  let pool = await sql.connect (config);
-  let fundNav = await pool.
+  catch (error) {
+    console.log("Data not found", error);
+  }
 }
 
+// async function createPDF(pdf){
+//   try{
 //
+//     let pool = wait sql.connect(config );
+//     let cc = await pool.request ()
+//     .input()
+//     .query();
+//     return cc.recordsets
+//   }
+//   catch(error){
+//     console.log("Error 404", error);
+//   }
+// }
+
 // //getUser data by NIC
 // async  function  getUserByNIC(NIC) {
 //   try {
@@ -101,5 +133,6 @@ module.exports = {
   getUserByRegNo:getUserByRegNo,
   getUserByMobileNumber:getUserByMobileNumber,
   getUserBalanceInquiryByMobileNumber:getUserBalanceInquiryByMobileNumber,
+  getFundPrices: getFundPrices,
   addUser:addUser
 }
