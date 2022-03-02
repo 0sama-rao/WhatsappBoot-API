@@ -23,7 +23,12 @@ async  function  getUserByRegNo(RegNo) {
     .input('input_parameter', sql.Int, RegNo)
     .query("SELECT * from Users where RegNo = @input_parameter");
     return  product.recordsets;
+
+
+
   }
+
+
 
   catch (error) {
     console.log("Cant use Characters ", 404);
@@ -67,21 +72,33 @@ async  function getUserBalanceInquiryByMobileNumber(MobileNumber) {
   }
 }
 
-//get FUndNav
-async  function getFundPrices(fundprice) {
+
+//Latest Fund Prices
+
+async  function  getLatestFundPrices() {
   try {
     let  pool = await  sql.connect(config);
-    let  mob = await  pool.request()
-    .input('date', sql.VarChar, fundprice)
-    .query('select * from offRed where eDate = @date' );
-    return  mob.recordsets;
+    let  fundPrices = await  pool.request()
+    .execute("LatestFundPrices");
+    return fundPrices.recordsets;
   }
-
   catch (error) {
-    console.log("Data not found", error);
+    console.log("Error found !! ", 404);
   }
 }
 
+//Get fund manager report link
+async  function  getFmReport() {
+  try {
+    let  pool = await  sql.connect(config);
+    let  report = await  pool.request()
+    .query("SELECT   FileName FROM   UFiles where page ='FundManager Reports' and PageHead ='Product Monitor' and ID in  (SELECT  Max(ID) FROM  UFiles where page ='FundManager Reports' and PageHead ='Product Monitor')   order by 1 desc");
+    return report.recordsets;
+  }
+  catch (error) {
+    console.log("Error found !! ", 404);
+  }
+}
 // async function createPDF(pdf){
 //   try{
 //
@@ -133,6 +150,7 @@ module.exports = {
   getUserByRegNo:getUserByRegNo,
   getUserByMobileNumber:getUserByMobileNumber,
   getUserBalanceInquiryByMobileNumber:getUserBalanceInquiryByMobileNumber,
-  getFundPrices: getFundPrices,
+  getLatestFundPrices: getLatestFundPrices,
+  getFmReport: getFmReport,
   addUser:addUser
 }

@@ -5,96 +5,162 @@ const  sql = require('mssql');
 
 
 
-let regNo, userName, address, city, country, zakatStatus, url ;
-let transRec1, transRec2, transRec3, transRec4, transRec5, statData;
-let transData = [];
-async function createPdf(mob, path) {
+let regNo, mobileNumber, userName, address, city, country, zakatStatus, url ;
+let balInquirey,balUnitCount, balInquirey2, balInquirey3, statData, balance,balance1,balance2,oPBalance;
+
+async function createPdf(mob, MobileNumber, path) {
 
    try{
      let  pool = await  sql.connect(config);
-     mob = await  pool.request()
+     mob1 = await  pool.request()
      .input('input', sql.VarChar, mob)
-     .query("SELECT * from Users where Mobile = @input");
+     .query("SELECT * from Users where Mobile ='"+mob+"'");
 
-     regNo = mob.recordset[0].RegNo;
-     userName = mob.recordset[0].Name;
-     address = mob.recordset[0].Address;
-     city = mob.recordset[0].City;
-     country = mob.recordset[0].Country;
-     zakatStatus = mob.recordset[0].ZakatStatus;
-      console.log();
+
+      userInfromation = mob1.recordsets;
+
+
+     regNo = mob1.recordset[0].RegNo;
+     userName = mob1.recordset[0].Name;
+     address = mob1.recordset[0].Address;
+     city = mob1.recordset[0].City;
+     country = mob1.recordset[0].Country;
+     zakatStatus = mob1.recordset[0].ZakatStatus;
+     mobileNumber = mob1.recordset[0].Mobile;
+
+     // console.log(mob1.recordset[0]);
 
         try{
+
           let  pool = await  sql.connect(config);
-          mob = await  pool.request()
-
-          .query("select top 5 TranDate, FundCode,Type,  Class,Rate, Amount, Units from AccStat where RegNo ='5735' order by 1 desc");
-
-          statData = mob.recordsets;
+          mob2 = await  pool.request()
+          .input('MobileNumber', sql.VarChar, mob)
+          .query("exec trump_D @MobileNumber  = '"+mob+"';");
 
 
-          transData = [[
-           mob.recordset[0].TranDate,
-           mob.recordset[0].FundCode,
-           mob.recordset[0].Type,
-           mob.recordset[0].Class,
-           mob.recordset[0].Rate,
-           mob.recordset[0].Amount,
-           mob.recordset[0].Units
-         ],
-           [
-           mob.recordset[1].TranDate,
-           mob.recordset[1].FundCode,
-           mob.recordset[1].Type,
-           mob.recordset[1].Class,
-           mob.recordset[1].Rate,
-           mob.recordset[1].Amount,
-           mob.recordset[1].Units
-         ],
-          [
-           mob.recordset[2].TranDate,
-           mob.recordset[2].FundCode,
-           mob.recordset[2].Type,
-           mob.recordset[2].Class,
-           mob.recordset[2].Rate,
-           mob.recordset[2].Amount,
-           mob.recordset[2].Units
-         ],
-         [
-           mob.recordset[3].TranDate,
-           mob.recordset[3].FundCode,
-           mob.recordset[3].Type,
-           mob.recordset[3].Class,
-           mob.recordset[3].Rate,
-           mob.recordset[3].Amount,
-           mob.recordset[3].Units
-         ],
-         [
-           mob.recordset[4].TranDate,
-           mob.recordset[4].FundCode,
-           mob.recordset[4].Type,
-           mob.recordset[4].Class,
-           mob.recordset[4].Rate,
-           mob.recordset[4].Amount,
-           mob.recordset[4].Units
-         ]
-];
+          transData = mob2.recordsets;
+          // console.log(statData);
+
+
+          // let removeComma =()=>{
+
+//           transData = [[
+//            mob2.recordset[0].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
+//            mob2.recordset[0].FundCode,
+//            mob2.recordset[0].Type,
+//            mob2.recordset[0].Class.replace(/ /, ' '),
+//            mob2.recordset[0].Rate,
+//            mob2.recordset[0].Amount,
+//            mob2.recordset[0].Units
+//          ],
+//            [
+//            mob2.recordset[1].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
+//            mob2.recordset[1].FundCode,
+//            mob2.recordset[1].Type,
+//            mob2.recordset[1].Class.replace(/ /, ' '),
+//            mob2.recordset[1].Rate,
+//            mob2.recordset[1].Amount,
+//            mob2.recordset[1].Units
+//          ],
+//           [
+//            mob2.recordset[2].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
+//            mob2.recordset[2].FundCode,
+//            mob2.recordset[2].Type,
+//            mob2.recordset[2].Class.replace(/ /, ' '),
+//            mob2.recordset[2].Rate,
+//            mob2.recordset[2].Amount,
+//            mob2.recordset[2].Units
+//          ],
+//          [
+//            mob2.recordset[3].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
+//            mob2.recordset[3].FundCode,
+//            mob2.recordset[3].Type,
+//            mob2.recordset[3].Class.replace(/ /, ' '),
+//            mob2.recordset[3].Rate,
+//            mob2.recordset[3].Amount,
+//            mob2.recordset[3].Units
+//          ],
+//          [
+//            mob2.recordset[4].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
+//            mob2.recordset[4].FundCode,
+//            mob2.recordset[4].Type,
+//            mob2.recordset[4].Class.replace(/ /, ' '),
+//            mob2.recordset[4].Rate,
+//            mob2.recordset[4].Amount,
+//            mob2.recordset[4].Units
+//          ]
+// ];
+        //
+        // console.log(transData[0][0]);
+        // console.log(transData[0][1]);
+        // console.log(transData[0][2]);
+        // console.log(transData[0][3]);
+        // console.log(transData[0][4]);
+        // console.log(transData[0][5]);
+        console.log(transData);
+        // console.log(mob2.recordset.count);
+
+      //
+      //   for (i = 0; i < transData.length; ++i) {
+      //   transData1 = transData.replaceAll("  ",",")
+          // }
+
+      //     document.write (transData.join(' '));
+      // }
+      //
+      //   removeComma();
+
+      try {
+        let  pool = await  sql.connect(config);
+        let  mob3 = await  pool.request()
+        .input('MobileNumber', sql.VarChar, mob)
+        .query("exec balInformation @MobileNumber  = '"+mob+"';");
+        statData2 = mob3.recordsets;
+
+        balInquirey = mob3.recordsets;
+
+        console.log(mob3.recordset);
+        // console.log(balInquirey[0][2].fundcode)
 
 
 
-          console.log(transData);
+    //     balInquirey = [[
+    //       mob3.recordset[0].fundcode,
+    //       mob3.recordset[0].BalUnits
+    //     ],
+    //     [
+    //       mob3.recordset[1].fundcode,
+    //       mob3.recordset[1].BalUnits
+    //     ],[
+    //     mob3.recordset[2].fundcode,
+    //     mob3.recordset[2].BalUnits
+    //   ]
+    // ];
+
+
+        // console.log(balInquirey[0][1]);
 
 
 
-          }
-        catch (error){
-          console.log("Data not found", error);
-        }
 
+
+            try{
+              let  pool = await  sql.connect(config);
+              let  mob4 = await  pool.request()
+              .input('MobileNumber', sql.VarChar, mob)
+              .query("exec OpenBalance @MobileNumber  = '"+mob+"';");
+              balance1 = mob4.recordset[0].openBalance
+
+
+              balance = balance1;
+
+
+              console.log(balance1);
+              console.log(mob);
 
 
      //Should take input and save data into string and pass thath string into formatted form of pdf
-     let doc = new PDFDocument({ size: "A4", margin: 50 });
+     let doc = new PDFDocument({ size: "A4", margin: 20 });
 
      generateHeader(doc);
      generateCustomerInformation(doc, userName);
@@ -103,13 +169,11 @@ async function createPdf(mob, path) {
      generateFooter(doc);
 
      doc.end();
-     doc.pipe(fs.createWriteStream('pdf-files/AKDIML'+regNo+'.pdf'));
+     doc.pipe(fs.createWriteStream('accountStatement-pdf-files/AKDIML'+regNo+'.pdf'));
 
-}
 
-  catch (error){
-     console.log("Data not found", error);
-   }
+
+
 //
 // Generating main header heading with forma
 // function generateHeader(doc){
@@ -128,47 +192,40 @@ async function createPdf(mob, path) {
 
 function generateHeader(doc) {
   doc
-    .image("logo.png", 50, 40, {width: 180})
+    .image("logo.png", 20, 20, {width: 320})
     .moveDown();
 }
 
 
 function generateCustomerInformation(doc) {
-  doc
-    .fillColor("#444444")
-    .fontSize(12)
-    .font("Helvetica-Bold")
-    .text("Personal Information", 50, 160);
 
-  generateHr(doc, 175);
-
-  const customerInformationTop = 180;
+  const customerInformationTop = 105;
 
   doc
     .fontSize(10)
     .font("Helvetica")
-    .text(formatDate(new Date()), 50, customerInformationTop + 90)
+    .text("Mobile: "+mobileNumber, 20, customerInformationTop + 75)
     .font("Helvetica-Bold")
-    .text("Reg. No. "+regNo  , 50, customerInformationTop + 15)
+    .text("Reg. No. "+regNo  , 20, customerInformationTop + 0)
     .font("Helvetica-Bold")
-    .text(userName, 50, customerInformationTop + 30)
+    .text(userName, 20, customerInformationTop + 15)
     .font("Helvetica")
-    .text(address, 50, customerInformationTop + 45)
+    .text(address, 20, customerInformationTop + 30)
     .text( city.replace(/\s+/g, ' ').trim()
     + ", " + country.replace(/\s+/g, ' ').trim(),
-    50, customerInformationTop + 60)
-    .text(zakatStatus , 50, customerInformationTop + 75)
+    20, customerInformationTop + 45)
+    .text(zakatStatus , 20, customerInformationTop + 60)
     .moveDown();
 }
 
 function generateHeading(doc) {
   doc
     .fillColor("#444444")
-    .fontSize(14)
+    .fontSize(16)
     .font("Helvetica-Bold")
-    .text("ACCOUNT STATEMENT", 240,320);
+    .text("Account Statement", 220,210);
 
-  generateHr(doc, 340);
+  generateHr(doc, 230);
 }
 
 
@@ -180,90 +237,125 @@ function generateHeading(doc) {
 function generateInvoiceTable(doc, statData) {
 
   let i;
-  const accStatTableTop = 350;
+  const accStatTableTop = 240;
 
   doc.font("Helvetica-Bold");
   generateTableRow(
-    doc,
-    accStatTableTop,
-    "Date",
-    "Fund",
-    "Type",
-    "Class",
-    "Amount",
-    "Units",
-    "Bal Units",
-
+    doc
+    .fontSize(11)
+    .text("Date", 20,240)
+    .text("Fund", 80,240)
+    .text("Type", 125,240)
+    .text("Class", 215,240)
+    .text("Rate", 258,240)
+    .text("Amount", 300,240)
+    .text("Units", 360,240)
+    .text("Bal Units", 425,240)
+    .text("Value in Rs.", 490,240)
   );
 
-  generateHr(doc, accStatTableTop + 15);
+  generateHr(doc, accStatTableTop + 20);
   doc.font("Helvetica");
 
   // for (i = 0; i < statData.length; i++) {
   //      const item = statData[i];
   //     }
-  for (i = 0; i < transData.length; i++) {
-    let item = transData[i];
-    const position = accStatTableTop + (i + 1) * 30;
-    generateTableRow(
-      doc,
-      position,
-      transData.TranDate,
-      transData.FundCode,
-      item.Class,
-      item.Rate,
-      item.Amount,
-      item.Units
-    );
 
-  }
+  let xPos = 20;
+  let yPos = 285;
+  let openBal ;
+  let yPosH = 385;
+  let yPos2= 410;
+  for (i = 0; i < transData[0].length; i++) {
+    let item = transData[i];
+
+    balance = transData[0][i].Units+ balance;
+    balUnitCount = balance.toFixed(4);
+
+    let opnBalance = balance1.toFixed(4);
+
+    generateTableRow(
+      doc
+      .fontSize(10)
+      .font("Helvetica")
+      .text(opnBalance, 425, 270)
+      .text(transData[0][i].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0] , xPos, yPos)
+      .text(transData[0][i].FundCode,  xPos+60, yPos)
+      .text("Opening Balance" , xPos+105, 270)
+      .text(transData[0][i].Type , xPos+105, yPos)
+      .text(transData[0][i].Class , xPos+208, yPos)
+      .text(transData[0][i].Rate , xPos+235, yPos)
+      .text(transData[0][i].Amount , xPos+280, yPos)
+      .text(transData[0][i].Units , xPos+340, yPos)
+      .text( balUnitCount , xPos+405, yPos)
+      .text()
+
+
+      // .text("Balance based on repurchase price:", xPos, yPos2)
+      // .text(balInquirey[0][0]+": "+balInquirey[0][1]+"  (" + formatDate(new Date())+")", xPos, yPos2+10)
+      // .text(balInquirey[1][0]+": "+balInquirey[1][1]+"  (" + formatDate(new Date())+")", xPos, yPos2+20)
+      // .text(balInquirey[2][0]+": "+balInquirey[2][1]+"  (" + formatDate(new Date())+")", xPos, yPos2+30)
+      // .text(balInquirey[3][0]+": "+balInquirey[3][1]+"  (" + formatDate(new Date())+")", xPos, yPos2+40)
+
+      );
+
+
+      yPos =yPos +15;
+
+
+
+      // .text(transData[i][0][1], 50, 430));
+    //   + transData[i][1] + "\xa0\xa0\xa0\xa0\xa0\xa0" + transData[i][2] + "\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0" +transData[i][3] + "\xa0\xa0\xa0\xa0\xa0\xa0" + transData[i][4] + "\xa0\xa0\xa0\xa0\xa0\xa0" + transData[i][5] + "\xa0\xa0\xa0\xa0\xa0\xa0"+ transData[i][6] + "\xa0\xa0\xa0\xa0\xa0\xa0"
+    // );
+}
+generateHr(doc, yPos);
+
+
+for (j = 0; j < balInquirey[0].length; j++) {
+  let items = balInquirey[j];
+
+generateTableRow(
+  doc
+  .fontSize(10)
+  .font("Helvetica-Bold")
+  .text(balInquirey[0][j].fundcode+":", xPos, yPos2-15)
+  .text("Rs."+balInquirey[0][j].Redemption.toFixed(4), xPos + 45, yPos2-15)
+  .text(balInquirey[0][j].BalUnits.toFixed(4), xPos+405, yPos2-15)
+  .text(balInquirey[0][j].Values.toFixed(2), xPos+475, yPos2-15)
+  // .text(balInquirey[j][1], xPos +60, yPos2)
+
+);
+yPos2 = yPos2+10;
+
+}
+generateTableRow(
+  doc
+  .fontSize(10)
+
+  .text("Disclaimer:",xPos, yPosH+335)
+  .text("Balance based on repurchase price of: "+balInquirey[0][0].eDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0] , xPos, yPosH-8)
+  .text(balUnitCount , xPos+405, yPos+8)
+
+);
+var x ="'AKD Investment Management Limited Registrar'";
+generateTableRow(
+doc
+.fontSize(10)
+.font("Helvetica")
+.text("The following Account Statement is for information and viewing purposes only. The value of the Units is applicable for" ,xPos, yPosH+350)
+.text("the mentioned date only. The value of the Units may vary at the time of more purchase of Units or at the time of redemption" ,xPos, yPosH+363)
+.text("of Units.For any discrepancy in the account statement call our UAN: 92-21-111-253-465 or call Registrar of the Fund " ,xPos, yPosH+376)
+.text("at 92-21-35810461-0466." ,xPos+234, yPosH+389)
+.font("Helvetica-Bold")
+.text(x,xPos, yPosH+389 )
+.text("(This is system generated statement doest not require any signature)",xPos+105, yPosH+413 )
+);
 }
 
-//   const subtotalPosition = accStatTableTop + (i + 1) * 30;
-//   generateTableRow(
-//     doc,
-//     subtotalPosition,
-//     "",
-//     "",
-//     "Subtotal",
-//     "",
-//     formatCurrency(accStat.subtotal)
-//   );
-//
-//   const paidToDatePosition = subtotalPosition + 20;
-//   generateTableRow(
-//     doc,
-//     paidToDatePosition,
-//     "",
-//     "",
-//     "Paid To Date",
-//     "",
-//     formatCurrency(accStat.paid)
-//   );
-//
-//   const duePosition = paidToDatePosition + 25;
-//   doc.font("Helvetica-Bold");
-//   generateTableRow(
-//     doc,
-//     duePosition,
-//     "",
-//     "",
-//     "Balance Due",
-//     "",
-//     formatCurrency(accStat.subtotal - accStat.paid)
-//   );
-//   doc.font("Helvetica");
-// }
-//
 function generateFooter(doc) {
   doc
     .fontSize(10)
-    .text(
-      "Payment is due within 15 days. Thank you for your business.",
-      50,
-      780,
-      { align: "center", width: 500 }
-    );
+
 }
 
 function generateTableRow(
@@ -292,7 +384,7 @@ function generateHr(doc, y) {
   doc
     .strokeColor("#aaaaaa")
     .lineWidth(1)
-    .moveTo(50, y)
+    .moveTo(20, y)
     .lineTo(550, y)
     .stroke();
 }
@@ -306,7 +398,7 @@ function formatDate(date) {
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  return year + "/" + month + "/" + day;
+  return day + "/" + month + "/" + year;
 }
 
 
@@ -338,7 +430,30 @@ function formatDate(date) {
 //   invoice_nr: 1234
 // };
 // }
+
 }
+catch (error){
+  console.log("Data not found", error);
+}
+}
+catch (error){
+  console.log("Data not found", error);
+}
+
+}
+
+catch (error){
+  console.log("Data not found", error);
+}
+
+}
+catch (error){
+  console.log("Data not found", error);
+}
+
+}
+
+
 
  module.exports = {
    createPdf:createPdf
