@@ -1,4 +1,5 @@
 var  db = require('./controllers/userController');
+var taxpdf = require('./controllers/taxCertPDF');
 var pdf = require('./controllers/pdfController');
 var  express = require('express');
 var  bodyParser = require('body-parser');
@@ -49,9 +50,15 @@ router.route('/user/BalanceInquiry/:mobile').get((request, response) => {
   })
 })
 
-router.route('/user/FundPrices/:id').get((request, response) => {
-  db.getFundPrices(request.params.id).then((data) => {
+router.route('/LatestFundPrices').get((request, response) => {
+  db.getLatestFundPrices(request.params.id).then((data) => {
     response.json(data);
+  })
+})
+
+router.route('/FundManagerReport').get((request, response) => {
+  db.getFmReport(request.params.id).then((data) => {
+    response.json("http://www.akdinvestment.com/uFiles/"+data);
   })
 })
 
@@ -73,15 +80,33 @@ router.route('/user/FundPrices/:id').get((request, response) => {
 //   response.return(path);
 //
 
-
+//Generating Account statement
 
 router.route('/user/AccountStatement/:mobile').get((request, response) => {
-  pdf.createPdf(request.params.mobile).then((data)=>{
+
+  const mobile = request.params.mobile
+    if(mobile.length < 11 || mobile.length > 11){
+      response.json( "Mobile Number not found! ");
+    }
+    else{
+  pdf.createPdf(mobile).then((data)=>{
+    response.json("Success!! PDF Generated of Mobile Number: "+mobile);
+  });
+}});
+
+
+router.route('/user/TaxCertificate/:mobile').get((request, response) => {
+
+  const mobile = request.params.mobile
+    if(mobile.length < 11 || mobile.length > 11 ){
+      response.json( "Mobile Number not found! ");
+    }
+    else{
+  taxpdf.createTaxPdf(mobile).then((data)=>{
     response.json(data);
   });
+}});
 
-  response.json("Pdf Created! ");
-});
 
 // router.route('/user/AccountStatement/:mobile').get((request, response) => {
 //   const pMob = request.params.id;

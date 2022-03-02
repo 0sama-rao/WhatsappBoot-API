@@ -1,7 +1,7 @@
 const  config = {
-  user:  'sa', // sql user
-  password:  'Akdiml@123', //sql user password
-  server:  '10.1.1.14', // if it does not work try- localhost
+  user:  'akdiml', // sql user
+  password:  'imlweb', //sql user password
+  server:  '202.63.219.93', // if it does not work try- localhost
   database:  'AKDIML',
   options: {
 
