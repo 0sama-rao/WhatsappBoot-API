@@ -85,6 +85,7 @@ router.route('/FundManagerReport').get((request, response) => {
 router.route('/user/AccountStatement/:mobile').get((request, response) => {
 
   const mobile = request.params.mobile
+
     if(mobile.length < 11 || mobile.length > 11){
       response.json( "Mobile Number not found! ");
     }
@@ -95,17 +96,32 @@ router.route('/user/AccountStatement/:mobile').get((request, response) => {
 }});
 
 
-router.route('/user/TaxCertificate/:mobile').get((request, response) => {
+router.route('/user/TaxCertificate/:mobile/:choice').get((request, response) => {
 
   const mobile = request.params.mobile
-    if(mobile.length < 11 || mobile.length > 11 ){
-      response.json( "Mobile Number not found! ");
-    }
-    else{
-  taxpdf.createTaxPdf(mobile).then((data)=>{
-    response.json(data);
+  const choice = request .params.choice
+  console.log(choice);
+    if (choice == 1){
+  taxpdf.createCGTtaxPdf(mobile,choice).then((data)=>{
+    response.json("Data is here");
   });
-}});
+}
+    else if (choice == 2){
+      taxpdf.createICtaxPdf(mobile,choice).then((data)=>{
+        response.json("Data is here for 2");
+      });
+  }
+    else if(choice == 3){
+      taxpdf.createVoItaxPdf(mobile,choice).then((data)=>{
+        response.json("Data is here for 3");
+      });
+    }
+
+    else if (choice >= 4){
+      response.json("Option not defined !")
+    }
+
+    });
 
 
 // router.route('/user/AccountStatement/:mobile').get((request, response) => {
