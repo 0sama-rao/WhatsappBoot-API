@@ -28,7 +28,7 @@ async function createPdf(mob, MobileNumber, path) {
      zakatStatus = mob1.recordset[0].ZakatStatus;
      mobileNumber = mob1.recordset[0].Mobile;
 
-     // console.log(mob1.recordset[0]);
+
 
         try{
 
@@ -39,76 +39,9 @@ async function createPdf(mob, MobileNumber, path) {
 
 
           transData = mob2.recordsets;
-          // console.log(statData);
 
-
-          // let removeComma =()=>{
-
-//           transData = [[
-//            mob2.recordset[0].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
-//            mob2.recordset[0].FundCode,
-//            mob2.recordset[0].Type,
-//            mob2.recordset[0].Class.replace(/ /, ' '),
-//            mob2.recordset[0].Rate,
-//            mob2.recordset[0].Amount,
-//            mob2.recordset[0].Units
-//          ],
-//            [
-//            mob2.recordset[1].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
-//            mob2.recordset[1].FundCode,
-//            mob2.recordset[1].Type,
-//            mob2.recordset[1].Class.replace(/ /, ' '),
-//            mob2.recordset[1].Rate,
-//            mob2.recordset[1].Amount,
-//            mob2.recordset[1].Units
-//          ],
-//           [
-//            mob2.recordset[2].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
-//            mob2.recordset[2].FundCode,
-//            mob2.recordset[2].Type,
-//            mob2.recordset[2].Class.replace(/ /, ' '),
-//            mob2.recordset[2].Rate,
-//            mob2.recordset[2].Amount,
-//            mob2.recordset[2].Units
-//          ],
-//          [
-//            mob2.recordset[3].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
-//            mob2.recordset[3].FundCode,
-//            mob2.recordset[3].Type,
-//            mob2.recordset[3].Class.replace(/ /, ' '),
-//            mob2.recordset[3].Rate,
-//            mob2.recordset[3].Amount,
-//            mob2.recordset[3].Units
-//          ],
-//          [
-//            mob2.recordset[4].TranDate.toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ')[0],
-//            mob2.recordset[4].FundCode,
-//            mob2.recordset[4].Type,
-//            mob2.recordset[4].Class.replace(/ /, ' '),
-//            mob2.recordset[4].Rate,
-//            mob2.recordset[4].Amount,
-//            mob2.recordset[4].Units
-//          ]
-// ];
-        //
-        // console.log(transData[0][0]);
-        // console.log(transData[0][1]);
-        // console.log(transData[0][2]);
-        // console.log(transData[0][3]);
-        // console.log(transData[0][4]);
-        // console.log(transData[0][5]);
         console.log(transData);
-        // console.log(mob2.recordset.count);
 
-      //
-      //   for (i = 0; i < transData.length; ++i) {
-      //   transData1 = transData.replaceAll("  ",",")
-          // }
-
-      //     document.write (transData.join(' '));
-      // }
-      //
-      //   removeComma();
 
       try {
         let  pool = await  sql.connect(config);
@@ -121,25 +54,6 @@ async function createPdf(mob, MobileNumber, path) {
 
         console.log(mob3.recordset);
         // console.log(balInquirey[0][2].fundcode)
-
-
-
-    //     balInquirey = [[
-    //       mob3.recordset[0].fundcode,
-    //       mob3.recordset[0].BalUnits
-    //     ],
-    //     [
-    //       mob3.recordset[1].fundcode,
-    //       mob3.recordset[1].BalUnits
-    //     ],[
-    //     mob3.recordset[2].fundcode,
-    //     mob3.recordset[2].BalUnits
-    //   ]
-    // ];
-
-
-        // console.log(balInquirey[0][1]);
-
 
 
 
